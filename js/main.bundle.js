@@ -2470,6 +2470,67 @@
     };
     document.addEventListener("DOMContentLoaded", () => {
       console.log("Document is ready, initializing OgarX Engine...");
+
+// ==== OGARX custom skin inputs hookup (injected) ====
+(function(){
+  function applySkinsToPlayerInfo() {
+    try {
+      var skin1 = document.getElementById("skin1");
+      var skin2 = document.getElementById("skin2");
+      var s1 = skin1 && skin1.value ? skin1.value.trim() : "";
+      var s2 = skin2 && skin2.value ? skin2.value.trim() : "";
+      // cache in a global shim for when the game initializes
+      window.__OGX_PLAYER_INFO = window.__OGX_PLAYER_INFO || {};
+      window.__OGX_PLAYER_INFO.customSkin1 = s1 || null;
+      window.__OGX_PLAYER_INFO.customSkin2 = s2 || null;
+
+      // if the main game object is present, try to set there too
+      var app = window.app || window.ogx || window.OgarX || window.game || null;
+      if (app && app.playerInfo) {
+        app.playerInfo.customSkin1 = s1 || null;
+        app.playerInfo.customSkin2 = s2 || null;
+      }
+      if (window.skins && typeof window.skins.setOrGetSkin === "function") {
+        if (s1) window.skins.setOrGetSkin(s1);
+        if (s2) window.skins.setOrGetSkin(s2);
+      }
+    } catch(e){ /* no-op */ }
+  }
+
+  function initSkinInputs() {
+    var skin1 = document.getElementById("skin1");
+    var skin2 = document.getElementById("skin2");
+    if (!skin1 && !skin2) return;
+
+    // load from localStorage
+    var saved1 = localStorage.getItem("ogarx:skin1") || "";
+    var saved2 = localStorage.getItem("ogarx:skin2") || "";
+    if (skin1) skin1.value = saved1;
+    if (skin2) skin2.value = saved2;
+
+    // apply immediately
+    applySkinsToPlayerInfo();
+
+    function onInput() {
+      if (skin1) localStorage.setItem("ogarx:skin1", skin1.value.trim());
+      if (skin2) localStorage.setItem("ogarx:skin2", skin2.value.trim());
+      applySkinsToPlayerInfo();
+    }
+    if (skin1) skin1.addEventListener("input", onInput);
+    if (skin2) skin2.addEventListener("input", onInput);
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initSkinInputs);
+  } else {
+    initSkinInputs();
+  }
+
+  // Also re-apply after a short delay in case the app build initializes playerInfo later
+  setTimeout(applySkinsToPlayerInfo, 1500);
+  setTimeout(applySkinsToPlayerInfo, 4000);
+})();
+// ==== end OGARX custom skin inputs hookup ====
       _0x2395ab.start();
       _0x518936.start();
       window.app = _0x2395ab;
@@ -2479,3 +2540,78 @@
       window.textCache = _0x337cc2;
     });
   })();
+
+// ===== OGX: remote skin apply (appended) =====
+(function(){
+  if (window.__OGX_SKIN_PATCHED__) return; window.__OGX_SKIN_PATCHED__ = true;
+
+  function textToHex(buf){
+    return Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,"0")).join("");
+  }
+  function te(s){ return (new TextEncoder()).encode(s); }
+
+  function applyRemoteSkinsAsync(cell){
+    try{
+      if (!window.SKIN_REGISTRY) return;
+      // Try to read tag/nickname from common fields
+      const tag  = (cell.tag ?? cell.playerTag ?? (cell.player && cell.player.tag) ?? "") + "";
+      const nick = (cell.nickname ?? cell.name ?? (cell.player && cell.player.nickname) ?? "") + "";
+      const raw  = (tag + ":" + nick).toLowerCase().trim();
+      if (!raw) return;
+
+      if (cell.__ogx_skinKeyRaw !== raw){
+        cell.__ogx_skinKeyRaw = raw;
+        crypto.subtle.digest("SHA-1", te(raw)).then(d => {
+          const h = textToHex(d);
+          cell.__ogx_skinHash = h;
+          const rec = window.SKIN_REGISTRY.get(h);
+          if (rec){
+            if (rec.s1) cell.skin = rec.s1;
+            if (rec.s2) cell.childSkin = rec.s2;
+            if (window.skins && typeof window.skins.setOrGetSkin === "function"){
+              if (rec.s1) window.skins.setOrGetSkin(rec.s1);
+              if (rec.s2) window.skins.setOrGetSkin(rec.s2);
+            }
+          }
+        }).catch(()=>{});
+      } else if (cell.__ogx_skinHash){
+        const rec = window.SKIN_REGISTRY.get(cell.__ogx_skinHash);
+        if (rec){
+          if (rec.s1) cell.skin = rec.s1;
+          if (rec.s2) cell.childSkin = rec.s2;
+        }
+      }
+    }catch(e){ /* ignore */ }
+  }
+
+  function patchProto(proto){
+    const orig = proto["drawSkin"];
+    if (typeof orig !== "function" || orig.__ogxPatched) return;
+    proto["drawSkin"] = function(ctx){
+      applyRemoteSkinsAsync(this);
+      return orig.call(this, ctx);
+    };
+    proto["drawSkin"].__ogxPatched = true;
+  }
+
+  function scanAndPatch(){
+    try{
+      const names = Object.getOwnPropertyNames(window);
+      for (const k of names){
+        const v = window[k];
+        if (!v || typeof v !== "function") continue;
+        const p = v.prototype;
+        if (!p) continue;
+        if (Object.prototype.hasOwnProperty.call(p, "drawSkin")){
+          patchProto(p);
+        }
+      }
+    }catch(e){}
+  }
+
+  // initial + delayed scans to catch late-loading classes
+  scanAndPatch();
+  setTimeout(scanAndPatch, 800);
+  setTimeout(scanAndPatch, 3000);
+})();
+// ===== end OGX remote skin patch =====
