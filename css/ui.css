@@ -3,9 +3,15 @@
 }
 
 .player-inputs {
-    display: flex;
-    justify-content: center;
-    gap: 5px;
+  display: grid;
+  grid-template-columns: repeat(2, 180px);
+  gap: 10px;
+  justify-content: center;
+}
+
+.player-inputs .form-control {
+  width: 180px;           
+  text-align: center;   
 }
 
 .form-control {
@@ -146,4 +152,6 @@
     background-image: linear-gradient(to bottom, #333333 70%, #272727 50%);
     outline: none;
     box-shadow: none;
+
 }
+
