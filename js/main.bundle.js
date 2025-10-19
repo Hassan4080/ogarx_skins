@@ -1170,7 +1170,7 @@
       }
     }();
     const _0x584fcf = new Image();
-    _0x584fcf.src = "../../assets/images/Virus.webp";
+    _0x584fcf.src = "../../images/Virus.webp";
     _0x584fcf.width = 0x100;
     _0x584fcf.height = 0x100;
     class _0x270f21 {
