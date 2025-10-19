@@ -790,10 +790,10 @@
         const _0x3db33f = Math.min(_0x18b2e3, _0x33ed1d);
         _0x18b203.height = _0x438185 * _0x3db33f;
         _0x16162f.clearRect(0x0, 0x0, _0x18b203.width, _0x18b203.height);
-        _0x16162f.fillStyle = '#FFFFFF';
+        _0x16162f.fillStyle = '#eb00df';
         _0x16162f.font = "500 " + 0x19 * _0x3db33f + "px Ubuntu";
-        const _0x11bcd3 = _0x16162f.measureText("Leaderboard").width;
-        _0x16162f.fillText("Leaderboard", (_0x18b203.width - _0x11bcd3) / 0x2, 0x20 * _0x3db33f);
+        const _0x11bcd3 = _0x16162f.measureText("Ireina").width;
+        _0x16162f.fillText("Ireina", (_0x18b203.width - _0x11bcd3) / 0x2, 0x20 * _0x3db33f);
         _0x16162f.font = "500 " + 0x10 * _0x3db33f + "px Ubuntu";
         _0x16162f.textAlign = 'left';
         _0x16162f.textBaseline = 'top';
