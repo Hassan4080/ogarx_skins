@@ -1,0 +1,149 @@
+.logo {
+    width: 330px;
+}
+
+.player-inputs {
+    display: flex;
+    justify-content: center;
+    gap: 5px;
+}
+
+.form-control {
+    font-family: 'Ubuntu';
+    font-weight: 600;
+    color: #464646;
+    text-align: center;
+    border-radius: 15px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #000000;
+    padding: 10px 10px;
+    background-image: linear-gradient(to bottom, #ffffff 70%, #ececec 50%);
+}
+
+.input-nickname {
+    width: 50%;
+}
+
+.input-tag {
+    width: 20%;
+}
+
+.buttons-group {
+    display: flex;
+    gap: 10px;
+}
+
+.button {
+    font-size: 20px;
+    font-weight: 600;
+    text-align: center;
+    color: white;
+    border-radius: 8px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #000000;
+    cursor: pointer;
+    padding: 8px 10px;
+    -webkit-text-stroke: black;
+    -webkit-text-stroke-width: 1px;
+    letter-spacing: -1px;
+}
+
+.button i {
+    font-size: 20px;
+}
+
+.gallery-button {
+    position: relative;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    line-height: 70px;
+    padding: 0;
+    background-image: linear-gradient(to bottom, #e74646 70%, #d04040 50%);
+}
+
+.gallery-button .plus {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+
+    border-color: #000000;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 50%;
+
+    background-image: url('https://scrux.io/plus.8976a56d.png');
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.gallery-button:hover {
+    background-image: linear-gradient(to bottom, #f06363 70%, #e65a5a 50%);
+}
+
+.play-button {
+    width: 200px;
+    background-image: linear-gradient(to bottom, #7ce746 70%, #71d040 50%);
+}
+
+.play-button:hover {
+    background-image: linear-gradient(to bottom, #9ef867 70%, #8bdb5a 50%);
+}
+
+.spectate-button {
+    background-image: linear-gradient(to bottom, #F5B700 70%, #e2ac0e 50%);
+}
+
+.spectate-button:hover {
+    background-image: linear-gradient(to bottom, #ffce3d 70%, #efc444 50%);
+}
+
+.settings-button {
+    background-image: linear-gradient(to bottom, #333333 70%, #272727 50%);
+}
+
+.settings-button:hover {
+    background-image: linear-gradient(to bottom, #555555 70%, #444444 50%);
+}
+
+.restart-button {
+    background-image: linear-gradient(to bottom, #008bf8 70%, #0b7dd6 50%);
+}
+
+.restart-button:hover {
+    background-image: linear-gradient(to bottom, #56b5ff 70%, #45acfd 50%);
+}
+
+.server-select {
+    display: flex;
+    gap: 10px;
+}
+
+.server-select-input {
+    width: 250px;
+    font-family: 'Ubuntu';
+    font-size: 17px;
+    font-weight: 600;
+    text-align: center;
+    color: #FFFFFF;
+    padding: 12px 10px;
+    background-color: #4b4b4b;
+    border: 1px solid #646464;
+    border-radius: 8px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #000000;
+    cursor: pointer;
+    -webkit-text-stroke: black;
+    -webkit-text-stroke-width: 1px;
+    letter-spacing: -1px;
+    background-image: linear-gradient(to bottom, #333333 70%, #272727 50%);
+    outline: none;
+    box-shadow: none;
+}

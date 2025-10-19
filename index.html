@@ -1,0 +1,227 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ogar✘ - The Arena Awaits. Can You Dominate?</title>
+  <link rel="icon" href="./assets/images/icon.ico" type="image/x-icon">
+  <link href="./assets/css/main.css" rel="stylesheet">
+  <!-- Toastr -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js" integrity="sha512-VEd+nq25CkR676O+pLBnDW09R7VQX9Mdiij052gVCp5yVH3jGtH70Ho/UUv4mJDsEdTvqRCFZg0NKGiojGnUCw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+</head>
+
+<body>
+  <!-- Game Display -->
+  <canvas id="game-display"></canvas>
+
+  <!-- Hud Display -->
+  <div id="hud-display" class="pointer-events-none visible">
+    <canvas id="leaderboard-canvas" width="200">
+  </div>
+  <canvas id="minimap-canvas"></canvas>
+  </div>
+
+  <!-- Menu Display -->
+  <div id="menu-display" class="pointer-events-all visible">
+    <div id="menu-display-center">
+      <div class="menu-container">
+        <img class="logo" src="./assets/images/ogarx.png">
+        <div class="player-skins">
+          <div class="gallery-button button">
+            Skins
+            <div class="plus"></div>
+          </div>
+        </div>
+        <div class="player-inputs">
+          <input id="tag" class="form-control input-tag" placeholder="Tag" maxlength="5">
+          <input id="nickname" class="form-control input-nickname" placeholder="Nickname" maxlength="15">
+        </div>
+        <div class="server-select">
+          <select class="server-select-input" id="servers">
+            <option value="wss://eu.senpa.io:2001/" selected>[EU FFA] Nemesis</option>
+            <option value="wss://us.senpa.io:2001/">[NA FFA] Heavenly</option>
+          </select>
+          <div id="restart" class="restart-button button"><i class="fas fa-redo-alt"></i></div>
+        </div>
+        <div class="buttons-group">
+          <div id="open-settings" class="settings-button button"><i class="fas fa-cog"></i></div>
+          <div id="play" class="play-button button"><i class="fas fa-play"></i> Play!</div>
+          <div id="spectate" class="spectate-button button"><i class="fa-solid fa-eye"></i></div>
+        </div>
+        <a href="https://www.buymeacoffee.com/ogarx" target="_blank" rel="noopener noreferrer">
+          <img src="https://img.buymeacoffee.com/button-api/?text=Buy me a coffee&emoji=☕&slug=ogarx&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=ffffff" />
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Settings Display -->
+   <div id="settings-display" class="pointer-events-all hidden">
+      <div id="settings-display-center">
+        <div id="settings">
+          <div id="settings-close-btn">✘</div>
+          <div id="settings-container">
+            <div class="tabs">
+              <div class="tab active" data-tab="game-settings"><i class="fas fa-cog"></i>Game</div>
+              <div class="tab" data-tab="controls"><i class="fas fa-keyboard"></i>Controls</div>
+              <div class="tab" data-tab="mouse"><i class="fas fa-mouse"></i>Mouse</div>
+            </div>
+            <div class="tabs-container">
+              <div class="tab-content active" id="game-settings">
+                <div class="option">
+                  <span>Animation delay: <span class="slider-value" id="animationDelayValue">144</span></span>
+                  <input type="range" class="setting-slider" id="animationDelay" min="40" max="200" value="140">
+                </div>
+                <div class="option">
+                  <span>Cell transparency: <span class="slider-value" id="cellTransparencyValue">1</span></span>
+                  <input type="range" class="setting-slider" id="cellTransparency" min="0.2" max="1" value="1" step="0.1">
+                </div>
+                <div class="option">
+                  <span>Nicknames:</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="showNicknames">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="option">
+                  <span>Mass:</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="showMass">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="option">
+                  <span>Skins:</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="showSkins">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="option">
+                  <span>Grid:</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="showGrid">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="option">
+                  <span>Sectors:</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="showSectors">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="option">
+                  <span>Show pellets:</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="showPellets">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+                <div class="option">
+                  <span>Debug mode:</span>
+                  <label class="toggle-switch">
+                    <input type="checkbox" id="showDebug">
+                    <span class="slider"></span>
+                  </label>
+                </div>
+              </div>
+              <div class="tab-content" id="controls">
+                <div class="option">
+                  <span>Macro feed:</span>
+                  <input id="macroFeedKey" class="hotkey-input" value="KeyZ" maxlength="1" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                </div>
+                <div class="option">
+                  <span>Split:</span>
+                  <input id="splitKey" class="hotkey-input" value="Space" maxlength="1" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                </div>
+                <div class="option">
+                  <span>Doublesplit:</span>
+                  <input id="doubleSplitKey" class="hotkey-input" value="KeyA" maxlength="1" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                </div>
+                <div class="option">
+                  <span>Tricksplit:</span>
+                  <input id="tricksplitKey" class="hotkey-input" value="ShiftLeft" maxlength="1" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                </div>
+                <div class="option">
+                  <span>Switch player:</span>
+                  <input id="switchPlayerkey" class="hotkey-input" value="Tab" maxlength="1" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+                </div>
+              </div>
+              <div class="tab-content" id="mouse">
+                <div class="option">
+                  <span>Left click:</span>
+                  <select class="mouseActions" id="leftClick">
+                    <option value="noAction">No action</option>
+                    <option value="macroFeed">Macro Feed</option>
+                    <option value="split">Split</option>
+                    <option value="doubleSplit">Doublesplit</option>
+                    <option selected value="tricksplit">Tricksplit</option>
+                    <option value="switchPlayer">Switch player</option>
+                  </select>
+                </div>
+                <div class="option">
+                  <span>Middle click:</span>
+                  <select class="mouseActions" id="middleClick">
+                    <option selected ="noAction">No action</option>
+                    <option value="macroFeed">Macro Feed</option>
+                    <option value="split">Split</option>
+                    <option value="doubleSplit">Doublesplit</option>
+                    <option value="tricksplit">Tricksplit</option>
+                    <option value="switchPlayer">Switch player</option>
+                  </select>
+                </div> 
+                <div class="option">
+                  <span>Right click:</span>
+                  <select class="mouseActions" id="rightClick">
+                    <option selected value="noAction">No action</option>
+                    <option value="macroFeed">Macro Feed</option>
+                    <option value="split">Split</option>
+                    <option value="doubleSplit">Doublesplit</option>
+                    <option value="tricksplit">Tricksplit</option>
+                    <option value="switchPlayer">Switch player</option>
+                  </select>
+                </div> 
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+   </div>
+
+  <!-- Gallery Display -->
+  <div id="gallery-display" class="pointer-events-all hidden">
+    <div id="gallery-display-center">
+      <div id="gallery">
+        <div id="settings-close-btn">✘</div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+        toastr.options = {
+        'closeButton': true,
+        'debug': false,
+        'newestOnTop': false,
+        'progressBar': true,
+        'positionClass': 'toast-top-center',
+        'preventDuplicates': false,
+        'showDuration': '1000',
+        'hideDuration': '1000',
+        'timeOut': '5000',
+        'extendedTimeOut': '1000',
+        'showEasing': 'swing',
+        'hideEasing': 'linear',
+        'showMethod': 'fadeIn',
+        'hideMethod': 'fadeOut',
+    }
+  </script>
+
+  <script src="https://unpkg.com/gifler@latest/gifler.min.js"></script>
+  <script src="./assets/js/main.bundle.js"></script>
+
+</body>
+</html>

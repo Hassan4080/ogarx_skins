@@ -1,0 +1,56 @@
+#gallery-display {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    z-index: 2;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
+#gallery-display.visible {
+    display: block;
+}
+
+#gallery-display.hidden {
+    display: none;
+}
+
+#gallery-display-center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    z-index: 2;
+    transform: translate(-50%, -50%);
+    transform-origin: center;
+    transition: transform 0.3s ease-in-out;
+}
+
+#gallery {
+    width: 750px;
+    height: 500px;
+    position: relative;
+    color: #bebebe;
+    background-color: #222222;
+    border-radius: 15px;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #353535;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
+}
+
+#gallery-close-btn {
+    width: 30px;    
+    height: 30px;
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    color: #FFFFFF;
+    font-size: 18px;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 50%;
+    background-color: #141414;
+    border-width: 2px;
+    border-style: solid;
+    border-color: #353535;
+}
